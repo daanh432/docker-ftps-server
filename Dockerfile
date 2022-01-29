@@ -1,6 +1,7 @@
 FROM python:2-slim
 
-COPY . /app/
+COPY entrypoint.py /app/
+COPY requirements.txt /app/
 WORKDIR /app/
 RUN pip install -r requirements.txt
 RUN mkdir /ftp_root
