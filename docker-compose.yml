@@ -1,0 +1,13 @@
+services:
+  ftps_server:
+    build: .
+    volumes:
+      - ./data:/home/username
+      - ./yourcert.pem:/app/cert.pem
+      - ./yourkey.pem:/app/key.pem
+    environment:
+      USER: username
+      PASSWORD: yourpassword
+    ports:
+      - "21:21"
+      - "3000-3010:3000-3010"
