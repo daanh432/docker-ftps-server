@@ -1,7 +1,7 @@
 import os, random, string
 
 from pyftpdlib.authorizers import DummyAuthorizer
-from pyftpdlib.handlers import FTPHandler
+from pyftpdlib.handlers import TLS_FTPHandler
 from pyftpdlib.servers import FTPServer
 
 
@@ -27,24 +27,27 @@ def main():
     if ANONYMOUS:
         authorizer.add_anonymous("/ftp_root/nobody")
 
-    handler = FTPHandler
+    handler = TLS_FTPHandler
+    handler.certfile = 'keycert.pem'
     handler.authorizer = authorizer
     handler.permit_foreign_addresses = True
 
     passive_ports = map(int, PASSIVE_PORTS.split('-'))
     handler.passive_ports = range(passive_ports[0], passive_ports[1])
 
-    print('*************************************************')
-    print('*                                               *')
-    print('*    Docker image: mikatux                      *')
-    print('*    https://github.com/mikatux/ftp-server      *')
-    print('*                                               *')
-    print('*************************************************')
+    print('**********************************************************')
+    print('*                                                        *')
+    print('*                Docker image: daanh432                  *')
+    print('*    https://github.com/daanh432/docker-ftps-server      *')
+    print('*                                                        *')
+    print('**********************************************************')
     print('SERVER SETTINGS')
     print('---------------')
     print "FTP User: ",USER
     print "FTP Password: ",PASSWORD
     server = FTPServer((HOST, PORT), handler)
+    server.max_cons = 10
+    server.max_cons_per_ip = 5
     server.serve_forever()
     
 if __name__ == '__main__':
